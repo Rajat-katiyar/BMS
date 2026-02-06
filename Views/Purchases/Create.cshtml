@@ -1,0 +1,106 @@
+@model BusinessManagementSystem.Models.Purchase
+
+@{
+    ViewData["Title"] = "New Purchase";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-cart-plus"></i> New Purchase Order</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PurchaseDate" class="form-label">Date <span class="text-danger">*</span></label>
+                                <input asp-for="PurchaseDate" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="InvoiceNumber" class="form-label">Invoice Number</label>
+                                <input asp-for="InvoiceNumber" class="form-control" placeholder="Vendor Invoice #" />
+                                <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="VendorId" class="form-label">Vendor <span class="text-danger">*</span></label>
+                                <select asp-for="VendorId" class ="form-select" asp-items="ViewBag.VendorId">
+                                    <option value="">-- Select Vendor --</option>
+                                </select>
+                                <span asp-validation-for="VendorId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ProductId" class="form-label">Product <span class="text-danger">*</span></label>
+                                <select asp-for="ProductId" class ="form-select" asp-items="ViewBag.ProductId">
+                                    <option value="">-- Select Product --</option>
+                                </select>
+                                <span asp-validation-for="ProductId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Quantity" class="form-label">Quantity <span class="text-danger">*</span></label>
+                                <input asp-for="Quantity" class="form-control" type="number" min="1" oninput="calculateTotal()" id="Quantity" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UnitPrice" class="form-label">Unit Price (₹) <span class="text-danger">*</span></label>
+                                <input asp-for="UnitPrice" class="form-control" type="number" step="0.01" oninput="calculateTotal()" id="UnitPrice" />
+                                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount (Auto-calculated)</label>
+                            <input type="text" class="form-control bg-light" id="TotalAmount" readonly value="0.00" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Notes / Remarks</label>
+                            <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Any additional notes..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Saving this purchase will automatically increase the product stock.
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Purchase
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function calculateTotal() {
+            var qty = parseFloat(document.getElementById('Quantity').value) || 0;
+            var price = parseFloat(document.getElementById('UnitPrice').value) || 0;
+            var total = qty * price;
+            document.getElementById('TotalAmount').value = total.toFixed(2);
+        }
+    </script>
+}

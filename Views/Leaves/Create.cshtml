@@ -1,0 +1,56 @@
+@model BusinessManagementSystem.Models.EmployeeLeave
+
+@{
+    ViewData["Title"] = "Apply Leave";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-paper-plane"></i> Apply for Leave</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="LeaveTypeId" class="form-label">Leave Type</label>
+                            <select asp-for="LeaveTypeId" class="form-select" asp-items="ViewBag.LeaveTypeId"></select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FromDate" class="form-label">From Date</label>
+                                <input asp-for="FromDate" class="form-control" type="date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="FromDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ToDate" class="form-label">To Date</label>
+                                <input asp-for="ToDate" class="form-control" type="date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="ToDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reason" class="form-label">Reason</label>
+                            <textarea asp-for="Reason" class="form-control" rows="3" placeholder="Enter reason for leave..."></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Apply Leave</button>
+                            <a asp-action="Index" class="btn btn-link text-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

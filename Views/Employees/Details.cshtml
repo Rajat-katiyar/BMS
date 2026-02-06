@@ -1,0 +1,125 @@
+@model BusinessManagementSystem.Models.Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-info-circle"></i> Employee Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Code:</strong>
+                        </div>
+                        <div class="col-md-8">
+                             <span class="badge bg-secondary">@Model.EmployeeCode</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Full Name:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <h3>@Model.EmployeeName</h3>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Designation:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Designation ?? "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Department/Role:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <!-- Could be mapped to User Roles later -->
+                            <span class="text-muted">General Staff</span>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Email ?? "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Phone ?? "N/A")
+                        </div>
+                    </div>
+
+                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Salary:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            ₹@Model.Salary.ToString("N2")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Status:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </div>
+                    </div>
+
+                     <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Joined On:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.CreatedOn.ToString("dd MMM yyyy")
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.EmployeeId" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.EmployeeId" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

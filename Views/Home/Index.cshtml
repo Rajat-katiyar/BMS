@@ -1,0 +1,193 @@
+﻿@model BusinessManagementSystem.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">Business Dashboard</h1>
+            <p class="lead text-muted">Real-time overview of your business metrics</p>
+            @if(Model.IsTodayHoliday)
+            {
+                <div class="alert alert-info d-inline-block">
+                    <i class="fas fa-umbrella-beach"></i> <strong>Holiday Mode Active</strong>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4 row-cols-1 row-cols-md-5 g-4">
+    <div class="col">
+        <div class="card bg-primary text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-box fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Total Products</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalProducts</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-success text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-truck fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Total Vendors</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalVendors</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Employee Card -->
+    <div class="col">
+        <div class="card bg-warning text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Employees</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalEmployees</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Card -->
+    <div class="col">
+        <div class="card bg-success text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-check-circle fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Present Today</h5>
+                <h2 class="display-4 fw-bold">@Model.TodayPresent</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-info text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-shopping-cart fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Total Purchases</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalPurchases</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card bg-danger text-white shadow-sm h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-cubes fa-3x mb-3 opacity-50"></i>
+                <h5 class="card-title">Total Stock</h5>
+                <h2 class="display-4 fw-bold">@Model.TotalStock</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Purchases -->
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white border-bottom-0">
+                <h5 class="mb-0 text-primary"><i class="fas fa-history"></i> Recent Purchases</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Vendor</th>
+                                <th>Date</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentPurchases.Any())
+                            {
+                                @foreach (var item in Model.RecentPurchases)
+                                {
+                                    <tr>
+                                        <td><span class="badge bg-light text-dark border">@item.PurchaseId</span></td>
+                                        <td>@item.VendorName</td>
+                                        <td>@item.PurchaseDate.ToString("dd MMM")</td>
+                                        <td class="text-end fw-bold">₹@item.TotalAmount.ToString("N2")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">
+                                        No recent purchases found.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white text-center">
+                <a asp-controller="Purchases" asp-action="Index" class="btn btn-sm btn-outline-primary">View All Purchases</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock Alert -->
+    <div class="col-md-5">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white border-bottom-0">
+                <h5 class="mb-0 text-danger"><i class="fas fa-exclamation-triangle"></i> Low Stock Alert</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-center">Stock</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.LowStockProducts.Any())
+                            {
+                                @foreach (var item in Model.LowStockProducts)
+                                {
+                                    <tr>
+                                        <td>@item.ProductName</td>
+                                        <td class="text-center">
+                                            <strong>@item.Quantity</strong> <small class="text-muted">@item.Unit</small>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (item.Quantity == 0)
+                                            {
+                                                <span class="badge bg-danger">Out of Stock</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">Low (&lt; @item.MinStock)</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-success py-4">
+                                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                        <p class="mb-0">All stock levels are healthy!</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white text-center">
+                <a asp-controller="Products" asp-action="Index" class="btn btn-sm btn-outline-danger">Manage Inventory</a>
+            </div>
+        </div>
+    </div>
+</div>

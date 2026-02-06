@@ -1,0 +1,54 @@
+@model BusinessManagementSystem.Models.Employee
+
+@{
+    ViewData["Title"] = "Delete Employee";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Deactivate Employee</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-circle"></i> Are you sure you want to deactivate this employee?
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.EmployeeName <small class="text-muted">(@Model.EmployeeCode)</small></h5>
+                            <hr />
+                            
+                            <div class="row mb-2">
+                                <div class="col-md-4">
+                                    <strong>Designation:</strong>
+                                </div>
+                                <div class="col-md-8">
+                                    @(Model.Designation ?? "N/A")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="EmployeeId" />
+                        
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-user-slash"></i> Confirm Deactivation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+             <div class="alert alert-info mt-3" role="alert">
+                <small><i class="fas fa-info-circle"></i> Note: This is a soft delete. The employee record will be marked as inactive.</small>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,138 @@
+@model BusinessManagementSystem.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0"><i class="fas fa-info-circle"></i> Product Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Product Name:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.ProductName
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>SKU:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="badge bg-secondary">@Model.SKU</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Description:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Description ?? "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Category:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Category ?? "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Price:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="text-success fw-bold">₹@Model.Price.ToString("N2")</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Current Stock:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @if (Model.CurrentStock <= Model.MinimumStockLevel)
+                            {
+                                <span class="badge bg-danger">@Model.CurrentStock @Model.Unit (Low Stock!)</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@Model.CurrentStock @Model.Unit</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Minimum Stock Level:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.MinimumStockLevel @Model.Unit
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Unit:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @(Model.Unit ?? "N/A")
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Status:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactive</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Created On:</strong>
+                        </div>
+                        <div class="col-md-8">
+                            @Model.CreatedDate.ToString("dd MMM yyyy, hh:mm tt")
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

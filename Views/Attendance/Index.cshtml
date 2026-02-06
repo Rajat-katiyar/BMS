@@ -1,0 +1,130 @@
+@model IEnumerable<BusinessManagementSystem.Models.EmployeeAttendance>
+
+@{
+    ViewData["Title"] = "My Attendance";
+    var todayAttendance = ViewBag.TodayAttendance as BusinessManagementSystem.Models.EmployeeAttendance;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2><i class="fas fa-clock"></i> My Attendance</h2>
+            <hr />
+        </div>
+    </div>
+
+    <!-- Actions Section -->
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3 text-center">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-muted">Today: @DateTime.Now.ToString("dd MMM yyyy")</h5>
+                    <h2 class="display-4" id="clock">@DateTime.Now.ToString("HH:mm:ss")</h2>
+                    
+                     @if (TempData["InfoMessage"] != null)
+                    {
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle"></i> @TempData["InfoMessage"]
+                        </div>
+                    }
+
+                    <div class="mt-4">
+                        @if (todayAttendance == null)
+                        {
+                            <form asp-action="CheckIn" method="post">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-sign-in-alt"></i> CHECK IN
+                                </button>
+                            </form>
+                        }
+                        else if (todayAttendance.CheckOutTime == null)
+                        {
+                            <div class="alert alert-info">
+                                Checked In at: <strong>@todayAttendance.CheckInTime?.ToString("hh:mm tt")</strong>
+                            </div>
+                            <form asp-action="CheckOut" method="post">
+                                <button type="submit" class="btn btn-danger btn-lg px-5">
+                                    <i class="fas fa-sign-out-alt"></i> CHECK OUT
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success">
+                                <p>Attendance Completed for Today!</p>
+                                <small>In: @todayAttendance.CheckInTime?.ToString("hh:mm tt") | Out: @todayAttendance.CheckOutTime?.ToString("hh:mm tt")</small>
+                                <br/>
+                                <strong>Status: @todayAttendance.Status</strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-history"></i> Attendance History</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Working Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.AttendanceDate.ToString("dd MMM yyyy")</td>
+                                    <td>@(item.CheckInTime?.ToString("hh:mm tt") ?? "-")</td>
+                                    <td>@(item.CheckOutTime?.ToString("hh:mm tt") ?? "-")</td>
+                                    <td>@(item.WorkingHours?.ToString("0.00") ?? "0") hrs</td>
+                                    <td>
+                                        @if (item.Status == "Present")
+                                        {
+                                            <span class="badge bg-success">Present</span>
+                                        }
+                                        else if (item.Status == "HalfDay")
+                                        {
+                                            <span class="badge bg-warning text-dark">Half Day</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@item.Status</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No attendance records found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple Clock
+    setInterval(function() {
+        var now = new Date();
+        var timeString = now.toLocaleTimeString();
+        document.getElementById('clock').innerText = timeString;
+    }, 1000);
+</script>
